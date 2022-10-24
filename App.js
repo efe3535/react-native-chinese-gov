@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import type { Node } from 'react';
+import ArrestedText from './widgets/arrested_text.js'
 import {
   SafeAreaView,
   StatusBar,
@@ -10,18 +11,11 @@ import {
   Alert,
   ScrollView,
   Image,
-  TextInput
+  TextInput,
+  ToastAndroid,
+  Vibration
 } from 'react-native';
 
-
-const ArrestedText = (props) => {
-  if (props.guilty) {
-    return <Text style={{fontWeight:'bold', fontSize:24}}>We'll arrest you tomorrow. </Text>
-  } else {
-    return <Text style={{fontWeight:'bold'}} selectable>{props.val}</Text>
-
-  }
-}
 
 const App: () => Node = () => {
   const [disabledBool, setDisabledBool] = useState(false);
@@ -38,7 +32,7 @@ const App: () => Node = () => {
       setBorderColor("#282828");
     }
   }
-
+  
   const popLast = () => {
     if (opinionList) {
       setOpinionList(opinionList.slice(0, opinionList.length - 1));
@@ -46,13 +40,14 @@ const App: () => Node = () => {
   }
 
   const createAlert = () => {
+    Vibration.vibrate(100)
     if (!opinionList.join("").includes(fieldVal)) {
       console.log(opinionList)
       console.log([...opinionList, (opinionList.length + 1).toString() + " -> " + fieldVal + "\n"])
       setOpinionList(opinionList => [...opinionList, (opinionList.length + 1).toString() + " -> " + fieldVal + "\n"]);
       setFieldVal("");
       if (!disabledBool) {
-        Alert.alert("You've clicked the button.", "Thanks for your good feedbacks about our glorious motherland, China!",
+        Alert.alert("A message from our strong leader", "Thanks for your good feedbacks about our glorious motherland, China!",
           [
             {
               text: "好的",
@@ -62,7 +57,7 @@ const App: () => Node = () => {
         );
 
       } else {
-        Alert.alert("You've clicked the button.", "Thanks! We'll arrest you tomorrow!",
+        Alert.alert("A message from our strong leader", "Thanks! We'll arrest you tomorrow!",
           [
             {
               text: "好的",
